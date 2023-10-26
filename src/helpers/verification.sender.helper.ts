@@ -3,36 +3,52 @@ import nodemailer from 'nodemailer';
 interface MailOptions {
     to: string;
     subject: string;
+    from: {
+        name: string,
+        address: string
+    };
     text: string;
 }
+
+const sendMail = async (transporter: any, mailOptions: MailOptions) => {
+    try {
+        await transporter.sendMail(mailOptions);
+        return true;
+    } catch (error: any) {
+        console.log("Mail Gönderilemedi: " + error.message)
+        return false;
+    }
+}
+
 
 export const sendVerificationCode = async (email: string, verificationCode: string) => {
 
     try {
         const transporter = nodemailer.createTransport({
-            service: 'Gmail', // E-posta hizmet sağlayıcınızı seçin
+            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
             auth: {
-                user: process.env.EMAIL_ADRESS, // E-posta adresiniz
-                pass: process.env.PASSWORD, // E-posta hesap şifreniz
-            },
+                user: process.env.EMAIL_ADRESS,
+                pass: process.env.PASSWORD
+            }
         });
         const mailOptions: MailOptions = {
+            from: {
+                name: "Rozetle Bence",
+                address: process.env.EMAIL_ADRESS
+            },
             to: email,
-            subject: 'Rozetle Doğrulama Kodu',
-            text: `Mail Adresi için Doğrulama kodunuz: ${verificationCode}\n\nUygulamada açılan panele kodu girerek devam edebilirsiniz`, // Doğrulama kodu
+            subject: 'Rozetle Mail Doğrulama Kodu',
+            text: `Mail Adresi için Doğrulama kodunuz: ${verificationCode}\n\nUygulamada açılan ekran kodu girerek devam edebilirsiniz`, // Doğrulama kodu
         };
 
-        try {
-
-            await transporter.sendMail(mailOptions);
-            console.log("Mail send success")
-            return true;
-        } catch (error) {
-            console.log("could not send mail")
-        }
+        const result = await sendMail(transporter, mailOptions)
+        return result
 
     } catch (error) {
-        console.log("Create Transport is failed")
+        console.log("Create Transport is failed: "+error.message)
         return false
     }
 }

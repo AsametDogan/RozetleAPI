@@ -18,6 +18,6 @@ export const adminMiddleware = async (req: IRequestWithUser, res: Response, next
 
         next();
     } catch (error) {
-        res.status(400).json({ message: "Oturum Hatası" });
+        res.status(400).json({ message: "Oturum Hatası admin",success:false });
     }
 };

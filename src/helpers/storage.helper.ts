@@ -1,12 +1,26 @@
 
 import multer from 'multer';
 
-const storage = multer.diskStorage({
-    destination: './uploads/profiles',
-    filename: (req, file, cb) => {
-        const fileName = `${Date.now()}-${file.originalname}`;
-        cb(null, fileName);
-    },
-});
 
-export const upload = multer({ storage });
+
+export const profileImgStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "media/profile/")
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-pp-" + file.originalname)
+  },
+}
+)
+
+export const badgeImgStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "media/badge/")
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-badge-" + file.originalname)
+  },
+}
+)
+
+

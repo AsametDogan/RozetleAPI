@@ -8,8 +8,16 @@ const createBadge = async (req: IRequestWithUser, res: Response) => {
         return res.status(401).json({ message: 'Yetkilendirme hatası' });
     }
     try {
-        const { title, imgUrl, categoryId, totalCount, price, attainerRoles } = req.body;
-        const newBadge = new BadgeModel({ title, imgUrl, categoryId, totalCount, restCount:totalCount, price, attainerRoles });
+        const { title, categoryId, totalCount, price, attainerRoles } = req.body;
+        const newBadge = new BadgeModel({
+            title,
+            badgeImg: `http://164.92.184.184:5000/api/user/getImage/profile/${req.file?.filename}`,
+            categoryId,
+            totalCount,
+            restCount: totalCount,
+            price,
+            attainerRoles
+        });
         await newBadge.save();
         res.status(201).json({ message: 'Rozet oluşturma başarılı' });
     } catch (error) {
@@ -131,4 +139,4 @@ const getAvailableBadges = async (req: IRequestWithUser, res: Response) => {
 
 }
 
-export { getAllBadges, createBadge, deleteBadge, deactiveBadge, updateBadge,getAvailableBadges }
+export { getAllBadges, createBadge, deleteBadge, deactiveBadge, updateBadge, getAvailableBadges }

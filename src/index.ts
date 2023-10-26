@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import routes from './routes';
 import database from './config/database';
 import cors from 'cors';
-//const upload = multer({ dest: 'uploads/' })
 
 
 dotenv.config({ path: __dirname + '/.env' });
